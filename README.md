@@ -18,7 +18,7 @@ This repo is splitteed into the following components:
 
 | Name | Description |
 | ---- | ----------- |
-| [api](tree/master/web) | Signal's API which receive events and process requests |
+| [api](web) | Signal's API which receive events and process requests |
 | docs | Contains all the high level documentation for the Signal platform |
 | web | Signal's web tracking library |
 | www | Signal's dashboard |
