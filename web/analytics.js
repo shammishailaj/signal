@@ -80,10 +80,11 @@ var ___signal = (function() {
       if (this.debug) {
         console.log(this.events);
       }
+      var that = this;
       this._send_events(function() {
-        this.events = [];
-        if (this.localStorage) {
-          this.localStorage.removeItem('_signal_events');
+        that.events = [];
+        if (that.localStorage) {
+          that.localStorage.removeItem('_signal_events');
         }
         if (cb) {
           cb();
