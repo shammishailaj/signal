@@ -1,0 +1,30 @@
+site_name: San
+site_url: https://astrocorp.net
+repo_url: https://github.com/astrocorp42/san
+
+site_dir: dist
+
+google_analytics:
+  - 'UA-123569541-1'
+  - 'auto'
+
+theme:
+  name: null
+  custom_dir: 'themes/mkdocs-material/material'
+  language: en
+  feature:
+  palette:
+    primary: indigo
+    accent: indigo
+  font:
+    text: Roboto
+    code: Roboto Mono
+  favicon: assets/images/favicon.png
+  logo:
+    icon: "\uE80C"
+
+nav:
+  - index.md
+  - implementations.md
+  - san-vs.md
+  - versions/v1.0.0.md

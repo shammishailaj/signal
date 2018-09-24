@@ -5,17 +5,18 @@
 
 ---
 
-Signal lets you automatically capture every user interaction from web, mobile, and cloud services: clicks, submits, transactions, emails, and much more. You can then analyze it all retroactively.
+Signal lets you automatically capture every user interaction froms: clicks, submits, transactions, emails, and much more. You can then analyze it all retroactively.
 
 1. [Repo organization](#repo-organization)
 2. [Usage](#usage)
+3. [Documentation](#documentation)
 
 ---
 
 
 ## Repo organization
 
-This repo is splitteed into the following components:
+This repo is splitted into the following components:
 
 | Name | Description |
 | ---- | ----------- |
@@ -30,13 +31,23 @@ This repo is splitteed into the following components:
 
 ## Usage
 
-
 ### Tracking snippet
 
 ```html
 <script type="text/javascript" async src="https://[SIGNAL_API_INSTANCE]/js?id=[PROJECT_TRACKING_ID]"></script>
 ```
 
+### NPM
+
+```bash
+npm i -s @astrocorp/signal
+```
+
+```javascript
+import signal from '@astrocorp/signal';
+
+signal.init('[PROJECT_TRACKING_ID]');
+```
 
 ### Content Security Policy
 
@@ -48,3 +59,7 @@ script-src: yoursignal.com;
 connect-src: yoursignal.com;
 img-src: yoursignal.com;
 ```
+
+## Documentation
+
+See [https://astrocorp.net/signal](https://astrocorp.net/signal)
