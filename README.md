@@ -18,12 +18,12 @@ Signal lets you automatically capture every user interaction: clicks, submits, t
 
 This repo is splitted into the following components:
 
-| Name | Description |
-| ---- | ----------- |
-| [api](api) | Signal's API which receive events and process requests |
-| [docs](docs) | Contains all the high level documentation for the Signal platform |
-| [web](web) | Signal's web tracking library |
-| [www](www) | Signal's dashboard |
+| Directory | Documentation | Description |
+| --------- | ----------- |
+| [api](api) | [docs](https://astrocorp.net/signal/api) |Signal's API which receive events and process requests |
+| [docs](docs) | [docs](https://astrocorp.net/signal) | Contains all the documentation for the Signal platform |
+| [web](web) | [docs](https://astrocorp.net/signal/web) | Signal's web tracking library |
+| [www](www) | [docs](https://astrocorp.net/signal/www) |Signal's dashboard |
 
 
 ## Documentation
