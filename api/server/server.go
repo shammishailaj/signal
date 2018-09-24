@@ -83,6 +83,8 @@ func New(databaseURL string) (*Server, error) {
 	router.Route("/api/v1", func(r chi.Router) {
 		// authenticated routes
 		r.Use(ret.authMiddleware)
+
+		r.Get("/accounts", ret.listAccountsRoute)
 	})
 
 	router.NotFound(func(w http.ResponseWriter, r *http.Request) {
@@ -120,6 +122,10 @@ func (srv *Server) resJSON(w http.ResponseWriter, code int, payload interface{})
 }
 
 func (srv *Server) resError(w http.ResponseWriter, code int, message string) {
+	if code == 500 {
+		message = "internal error"
+	}
+
 	res := APIResponse{Error: &message, Status: code}
 
 	jsonPayload, err := json.Marshal(res)
