@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"encoding/base64"
@@ -13,18 +13,18 @@ type trackerT struct {
 	ID string
 }
 
-func trackerJSRoute(w http.ResponseWriter, r *http.Request) {
+func (srv *Server) trackerJSRoute(w http.ResponseWriter, r *http.Request) {
 	trackingID := r.URL.Query().Get("id")
 	t := trackerT{trackingID}
 
 	w.Header().Set("Content-Type", "text/javascript")
-	err := tmpl.Execute(w, t)
+	err := srv.Tmpl.Execute(w, t)
 	if err != nil {
 		log.With("tracking_id", trackingID).Error(err.Error())
 	}
 }
 
-func pixelGIFRoute(w http.ResponseWriter, r *http.Request) {
+func (srv *Server) pixelGIFRoute(w http.ResponseWriter, r *http.Request) {
 	encodedEvents := r.URL.Query().Get("events")
 	if encodedEvents != "" {
 		decoded, err := base64.StdEncoding.DecodeString(encodedEvents)
@@ -40,7 +40,7 @@ func pixelGIFRoute(w http.ResponseWriter, r *http.Request) {
 	w.Write(GIF)
 }
 
-func eventsRoute(w http.ResponseWriter, r *http.Request) {
+func (srv *Server) eventsRoute(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Error(err.Error())
