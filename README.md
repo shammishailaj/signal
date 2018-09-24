@@ -6,7 +6,7 @@
 
 ---
 
-Signal lets you automatically capture every user interaction froms: clicks, submits, transactions, emails, and much more. You can then analyze it all retroactively.
+Signal lets you automatically capture every user interaction: clicks, submits, transactions, emails, and much more. You can then analyze it all retroactively. Liberate your analytics data!
 
 1. [Repo organization](#repo-organization)
 2. [Documentation](#documentation)
@@ -24,7 +24,6 @@ This repo is splitted into the following components:
 | [docs](docs) | Contains all the high level documentation for the Signal platform |
 | [web](web) | Signal's web tracking library |
 | [www](www) | Signal's dashboard |
-
 
 
 ## Documentation
