@@ -3,11 +3,15 @@ var ___signal = (function() {
 function Signal() {}
 
 Signal.prototype.init = function(tracking_id, options) {
+  if (!options) {
+    options = {};
+  }
   if (!window.$signal) {
     var uid = this._get_cookie('_signal');
     var events = [];
     if (window.localStorage) {
-      events = localStorage.getItem('_signal_events') || [];
+      this.localStorage = window.localStorage;
+      events = this.localStorage.getItem('_signal_events') || [];
     }
 
     this.tracking_id = tracking_id;
@@ -71,8 +75,8 @@ Signal.prototype.flush = function(cb) {
     this._send_events(cb);
     this.events = [];
   }
-  if (window.localStorage) {
-    localStorage.removeItem('signal_events');
+  if (this.localStorage) {
+    this.localStorage.removeItem('_signal_events');
   }
   if (cb) {
     cb();
@@ -131,8 +135,8 @@ Signal.prototype._push_event = function(event_type, data) {
     data: data,
   };
   this.events.push(event);
-  if (window.localStorage) {
-    localStorage.setItem('signal_events', this.events);
+  if (this.localStorage) {
+    this.localStorage.setItem('_signal_events', this.events);
   }
 }
 
