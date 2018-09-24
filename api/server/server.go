@@ -1,18 +1,27 @@
 package server
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"text/template"
+	"time"
 
 	"github.com/astrocorp42/astroflow-go"
 	"github.com/astrocorp42/astroflow-go/log"
 	"github.com/astrocorp42/signal/api/db"
 	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
+
+type APIResponse struct {
+	Error  *string     `json:"error"`
+	Data   interface{} `json:"data"`
+	Status int         `json:"status"`
+}
 
 type Server struct {
 	DB     *gorm.DB
@@ -52,18 +61,29 @@ func New(databaseURL string) (*Server, error) {
 	}
 
 	router.Use(astroflow.HTTPHandler(log.With()))
+	router.Use(middleware.RealIP)
+	router.Use(middleware.Recoverer)
+	router.Use(middleware.Timeout(30 * time.Second))
 	c := cors.Default()
 	router.Use(c.Handler)
 
-	// public routes
+	// tracker route
 	router.Get("/js", ret.trackerJSRoute)
+	// tracking routes
 	router.Get("/pixel.gif", ret.pixelGIFRoute)
 	router.Post("/events", ret.eventsRoute)
 
 	// API routes
-	router.Route("/api/v1", func(r chi.Router) {
-		r.Post("/login", ret.loginRoute)
-		r.Use(ret.authMiddleware)
+	router.Post("/api/v1/login", ret.loginRoute)
+
+	// authenticated routes
+	//router.Route("/api/v1", func(r chi.Router) {
+	//	// authenticated routes
+	//	r.Use(ret.authMiddleware)
+	//})
+
+	router.NotFound(func(w http.ResponseWriter, r *http.Request) {
+		ret.resError(w, 404, "route not found")
 	})
 
 	return ret, nil
@@ -74,5 +94,37 @@ func (srv *Server) Run(port string) error {
 }
 
 func (srv *Server) AutoMigrate() error {
-	return srv.DB.AutoMigrate(&db.Project{}, &db.AnalyticsEvent{}).Error
+	return srv.DB.AutoMigrate(
+		&db.Project{},
+		&db.AnalyticsEvent{},
+		&db.Account{},
+	).Error
+}
+
+// respondwithJSON write json response format
+func (srv *Server) resJSON(w http.ResponseWriter, code int, payload interface{}) {
+	res := APIResponse{Data: payload, Status: code}
+	jsonPayload, err := json.Marshal(res)
+	if err != nil {
+		log.Error(err.Error())
+		srv.resError(w, 500, err.Error())
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(code)
+	w.Write(jsonPayload)
+}
+
+func (srv *Server) resError(w http.ResponseWriter, code int, message string) {
+	res := APIResponse{Error: &message, Status: code}
+
+	jsonPayload, err := json.Marshal(res)
+	if err != nil {
+		log.Error(err.Error())
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(code)
+	w.Write(jsonPayload)
 }
