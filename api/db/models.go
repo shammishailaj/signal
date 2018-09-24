@@ -6,6 +6,8 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+const BcryptCost = 12
+
 type Account struct {
 	gorm.Model
 	Username string

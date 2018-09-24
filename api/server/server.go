@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"text/template"
 	"time"
 
@@ -24,9 +25,10 @@ type APIResponse struct {
 }
 
 type Server struct {
-	DB     *gorm.DB
-	Tmpl   *template.Template
-	Router *chi.Mux
+	DB        *gorm.DB
+	Tmpl      *template.Template
+	Router    *chi.Mux
+	JWTSecret string
 }
 
 var GIF = []byte{
@@ -55,9 +57,10 @@ func New(databaseURL string) (*Server, error) {
 
 	router := chi.NewRouter()
 	ret = &Server{
-		DB:     db,
-		Tmpl:   tmpl,
-		Router: router,
+		DB:        db,
+		Tmpl:      tmpl,
+		Router:    router,
+		JWTSecret: os.Getenv("JWT_SECRET"),
 	}
 
 	router.Use(astroflow.HTTPHandler(log.With()))
@@ -77,10 +80,10 @@ func New(databaseURL string) (*Server, error) {
 	router.Post("/api/v1/login", ret.loginRoute)
 
 	// authenticated routes
-	//router.Route("/api/v1", func(r chi.Router) {
-	//	// authenticated routes
-	//	r.Use(ret.authMiddleware)
-	//})
+	router.Route("/api/v1", func(r chi.Router) {
+		// authenticated routes
+		r.Use(ret.authMiddleware)
+	})
 
 	router.NotFound(func(w http.ResponseWriter, r *http.Request) {
 		ret.resError(w, 404, "route not found")
@@ -123,6 +126,8 @@ func (srv *Server) resError(w http.ResponseWriter, code int, message string) {
 	if err != nil {
 		log.Error(err.Error())
 	}
+
+	log.With("res", res).Error("error response")
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
