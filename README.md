@@ -1,6 +1,6 @@
 <p align="center">
   <h2 align="center">Signal</h2>
-  <p align="center">Web and Mobile Analytics</p>
+  <p align="center">Simple and beautiful Analytics</p>
 </p>
 
 ---
