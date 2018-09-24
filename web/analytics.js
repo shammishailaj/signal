@@ -11,7 +11,7 @@ var ___signal = (function() {
       options = {};
     }
 
-    var uid = this._get_cookie('_signal');
+    var aid = this._get_cookie('_signal');
     var events = [];
     if (window.localStorage) {
       this.localStorage = window.localStorage;
@@ -32,7 +32,7 @@ var ___signal = (function() {
       uid = this._uuid();
       this._set_cookie('_signal', uid);
     }
-    this.uid = uid;
+    this.aid = aid;
     this.location = '';
     this._track_page();
 
@@ -99,8 +99,8 @@ var ___signal = (function() {
       // session related
       referrer: document.referrer,
       device: {
-        width: screen.width,
-        height: screen.height,
+        w: screen.width,
+        h: screen.height,
       },
       // page related
       domain: window.location.hostname,
@@ -141,7 +141,9 @@ var ___signal = (function() {
   Signal.prototype._push_event = function(event_type, data) {
     var event = {
       timestamp: new Date().getTime(),
+      tid: this.tracking_id,
       type: event_type,
+      aid: this.aid,
       data: data,
     };
     this.events.push(event);
