@@ -42,4 +42,4 @@ flint
 testdata/**/.rocket.*
 testdata/**/*.tar.gz
 testdata/**/*.zip
-_docs/site/
+docs/dist/

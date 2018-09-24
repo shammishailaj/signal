@@ -1,8 +1,9 @@
-site_name: San
+site_name: Signal
 site_url: https://astrocorp.net
-repo_url: https://github.com/astrocorp42/san
+repo_url: https://github.com/astrocorp42/signal
 
 site_dir: dist
+docs_dir: pages
 
 google_analytics:
   - 'UA-123569541-1'
@@ -25,6 +26,3 @@ theme:
 
 nav:
   - index.md
-  - implementations.md
-  - san-vs.md
-  - versions/v1.0.0.md
