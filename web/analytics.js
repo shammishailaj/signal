@@ -1,17 +1,26 @@
 var ___signal = (function() {
 
-function Signal() {}
+  function Signal() {}
 
-Signal.prototype.init = function(tracking_id, options) {
-  if (!options) {
-    options = {};
-  }
-  if (!window.$signal) {
+  Signal.prototype.init = function(tracking_id, options) {
+    if (window.$signal) {
+      // already initialized
+      return
+    }
+    if (!options) {
+      options = {};
+    }
+
     var uid = this._get_cookie('_signal');
     var events = [];
     if (window.localStorage) {
       this.localStorage = window.localStorage;
-      events = this.localStorage.getItem('_signal_events') || [];
+      var oldEvents = this.localStorage.getItem('_signal_events');
+      if (oldEvents) {
+        events = JSON.parse(oldEvents);
+      } else {
+        events = [];
+      }
     }
 
     this.tracking_id = tracking_id;
@@ -41,239 +50,239 @@ Signal.prototype.init = function(tracking_id, options) {
     setInterval(this.flush.bind(this), 2000);
     window.$signal = this;
   }
-}
 
 
-Signal.prototype.track = function(event_name, payload, cb) {
-  var event = {
-    name: event_name,
-    payload: payload,
-  };
+  Signal.prototype.track = function(event_name, payload, cb) {
+    var event = {
+      name: event_name,
+      payload: payload,
+    };
 
-  this._push_event('track', event);
-  if (cb) {
-    cb();
-  }
-}
-
-Signal.prototype.reset = function() {
-}
-
-Signal.prototype.identify = function(id) {
-  var event = {
-    id: id,
-  };
-
-  this._push_event('identify', event);
-}
-
-Signal.prototype.flush = function(cb) {
-  if (this.events.length !== 0) {
-    if (this.debug) {
-      console.log(this.events);
+    this._push_event('track', event);
+    if (cb) {
+      cb();
     }
-    this._send_events(cb);
-    this.events = [];
-  }
-  if (this.localStorage) {
-    this.localStorage.removeItem('_signal_events');
-  }
-  if (cb) {
-    cb();
-  }
-}
-
-
-Signal.prototype._get_page = function() {
-  return {
-    // session related
-    referrer: document.referrer,
-    device: {
-      width: screen.width,
-      height: screen.height,
-    },
-    // page related
-    domain: window.location.hostname,
-    path: window.location.pathname,
-    hash:  window.location.hash,
-    title: document.title,
-    query: window.location.search,
-    url: window.location.href,
-  };
-}
-
-Signal.prototype._track_page = function() {
-  var page = this._get_page();
-
-  if (this.history_hash_mode === true) {
-    this.location = page.hash;
-  } else {
-    this.location = page.path;
   }
 
-  this._push_event('page_view', page);
-}
-
-
-Signal.prototype._uuid = function() {
-  var uuid = "", i, random;
-  for (i = 0; i < 32; i++) {
-    random = Math.random() * 16 | 0;
-
-    if (i == 8 || i == 12 || i == 16 || i == 20) {
-      uuid += "-"
-    }
-    uuid += (i == 12 ? 4 : (i == 16 ? (random & 3 | 8) : random)).toString(16);
-  }
-  return uuid;
-}
-
-Signal.prototype._push_event = function(event_type, data) {
-  var event = {
-    timestamp: new Date().getTime(),
-    type: event_type,
-    data: data,
-  };
-  this.events.push(event);
-  if (this.localStorage) {
-    this.localStorage.setItem('_signal_events', this.events);
-  }
-}
-
-Signal.prototype._send_events = function(cb) {
-  var request = null;
-
-  if (window.XMLHttpRequest) {
-    // code for modern browsers
-    request = new XMLHttpRequest();
-  } else {
-    // code for old IE browsers
-    request = new ActiveXObject("Microsoft.XMLHTTP");
+  Signal.prototype.reset = function() {
   }
 
-  var endpoint = this.api_endpoint+'/events';
+  Signal.prototype.identify = function(id) {
+    var event = {
+      id: id,
+    };
 
-  request.open('POST', endpoint, true);
-  request.setRequestHeader('Content-Type', 'application/json');
+    this._push_event('identify', event);
+  }
 
-  var that = this;
-  request.onreadystatechange = function() {
-    if (this.readyState === 4) {
-      if (that.debug) {
-        console.log('signal: status=', this.status);
-        console.log('signal: data=', this.responseText);
+  Signal.prototype.flush = function(cb) {
+    if (this.events.length !== 0) {
+      if (this.debug) {
+        console.log(this.events);
       }
-      if (cb) {
-        cb();
+      this._send_events(function() {
+        this.events = [];
+        if (this.localStorage) {
+          this.localStorage.removeItem('_signal_events');
+        }
+        if (cb) {
+          cb();
+        }
+      });
+    }
+  }
+
+
+  Signal.prototype._get_page = function() {
+    return {
+      // session related
+      referrer: document.referrer,
+      device: {
+        width: screen.width,
+        height: screen.height,
+      },
+      // page related
+      domain: window.location.hostname,
+      path: window.location.pathname,
+      hash:  window.location.hash,
+      title: document.title,
+      query: window.location.search,
+      url: window.location.href,
+    };
+  }
+
+  Signal.prototype._track_page = function() {
+    var page = this._get_page();
+
+    if (this.history_hash_mode === true) {
+      this.location = page.hash;
+    } else {
+      this.location = page.path;
+    }
+
+    this._push_event('page_view', page);
+  }
+
+
+  Signal.prototype._uuid = function() {
+    var uuid = "", i, random;
+    for (i = 0; i < 32; i++) {
+      random = Math.random() * 16 | 0;
+
+      if (i == 8 || i == 12 || i == 16 || i == 20) {
+        uuid += "-"
+      }
+      uuid += (i == 12 ? 4 : (i == 16 ? (random & 3 | 8) : random)).toString(16);
+    }
+    return uuid;
+  }
+
+  Signal.prototype._push_event = function(event_type, data) {
+    var event = {
+      timestamp: new Date().getTime(),
+      type: event_type,
+      data: data,
+    };
+    this.events.push(event);
+    if (this.localStorage) {
+      this.localStorage.setItem('_signal_events', JSON.stringify(this.events));
+    }
+  }
+
+  Signal.prototype._send_events = function(cb) {
+    var request = null;
+
+    if (window.XMLHttpRequest) {
+      // code for modern browsers
+      request = new XMLHttpRequest();
+    } else {
+      // code for old IE browsers
+      request = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+
+    var endpoint = this.api_endpoint+'/events';
+
+    request.open('POST', endpoint, true);
+    request.setRequestHeader('Content-Type', 'application/json');
+
+    var that = this;
+    request.onreadystatechange = function() {
+      if (this.readyState === 4) {
+        if (that.debug) {
+          console.log('signal: status=', this.status);
+          console.log('signal: data=', this.responseText);
+        }
+        if (cb) {
+          cb();
+        }
+      }
+    };
+
+    request.send(JSON.stringify(this.events));
+    request = null;
+  }
+
+
+  Signal.prototype._intercepted = function(e) {
+    var event = {
+      page: this._get_page(),
+      target: {
+        href: null,
+        text: null,
+        class: null,
+        id: null,
+        tag: null,
+      }
+    };
+
+    if (e.target !== null && typeof e.target === 'object') {
+      var target = e.target;
+      if (typeof target.href === 'string') {
+        event.target.href = target.href;
+      }
+      if (typeof target.id === 'string') {
+        event.target.id = target.id;
+      }
+      if (typeof target.tagName === 'string') {
+        event.target.tag = target.tagName.toLowerCase();
+      }
+      if (typeof target.className === 'string') {
+        event.target.class = target.className;
+      }
+      if (typeof target.innerText === 'string') {
+        event.target.text = target.innerText;
       }
     }
-  };
-
-  request.send(JSON.stringify(this.events));
-  request = null;
-}
-
-
-Signal.prototype._intercepted = function(e) {
-  var event = {
-    page: this._get_page(),
-    target: {
-      href: null,
-      text: null,
-      class: null,
-      id: null,
-      tag: null,
-    }
-  };
-
-  if (e.target !== null && typeof e.target === 'object') {
-    var target = e.target;
-    if (typeof target.href === 'string') {
-      event.target.href = target.href;
-    }
-    if (typeof target.id === 'string') {
-      event.target.id = target.id;
-    }
-    if (typeof target.tagName === 'string') {
-      event.target.tag = target.tagName.toLowerCase();
-    }
-    if (typeof target.className === 'string') {
-      event.target.class = target.className;
-    }
-    if (typeof target.innerText === 'string') {
-      event.target.text = target.innerText;
-    }
-  }
-  return event;
-}
-
-Signal.prototype._intercept_click = function(e) {
-  this._push_event('click', this._intercepted(e));
-}
-
-Signal.prototype._intercept_submit = function(e) {
-  this._push_event('submit', this._intercepted(e));
-  this.flush(function() { event.target.submit(); });
-
-  event.preventDefault();
-  return false;
-}
-
-Signal.prototype._intercept_beforunload = function(e) {
-  this.flush();
-  return;
-}
-
-Signal.prototype._encode_pixel_data = function(str) {
-  return encodeURIComponent(window.btoa((unescape(encodeURIComponent(str)))));
-}
-
-
-Signal.prototype._track_page_change = function() {
-  var current_page = window.location.pathname;
-
-  if (this.history_hash_mode === true) {
-    current_page += window.location.hash;
+    return event;
   }
 
-  if (this.location !== current_page) {
-    this._track_page();
+  Signal.prototype._intercept_click = function(e) {
+    this._push_event('click', this._intercepted(e));
   }
-}
 
-Signal.prototype._set_cookie = function(name,value,days) {
-  var expires = "";
-  var date = new Date();
-  if (days) {
-    date.setTime(date.getTime() + (days*24*60*60*1000));
+  Signal.prototype._intercept_submit = function(e) {
+    this._push_event('submit', this._intercepted(e));
+    this.flush(function() { event.target.submit(); });
+
+    event.preventDefault();
+    return false;
+  }
+
+  Signal.prototype._intercept_beforunload = function(e) {
+    this.flush();
+    return;
+  }
+
+  Signal.prototype._encode_pixel_data = function(str) {
+    return encodeURIComponent(window.btoa((unescape(encodeURIComponent(str)))));
+  }
+
+
+  Signal.prototype._track_page_change = function() {
+    var current_page = window.location.pathname;
+
+    if (this.history_hash_mode === true) {
+      current_page += window.location.hash;
+    }
+
+    if (this.location !== current_page) {
+      this._track_page();
+    }
+  }
+
+  Signal.prototype._set_cookie = function(name,value,days) {
+    var expires = "";
+    var date = new Date();
+    if (days) {
+      date.setTime(date.getTime() + (days*24*60*60*1000));
+    } else {
+      date.setTime(date.getTime() + (1000*12*30*24*60*60*1000));
+    }
+    expires = "; expires=" + date.toUTCString();
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+  }
+
+  Signal.prototype._get_cookie = function(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+      var c = ca[i];
+      while (c.charAt(0)==' ') c = c.substring(1,c.length);
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+  }
+
+  Signal.prototype._delete_cookie = function(name) {
+    document.cookie = name+'=; Max-Age=-99999999;';
+  }
+
+  if (!module) {
+    // browser
+    new Signal().signal.init('{{.ID}}');
   } else {
-    date.setTime(date.getTime() + (1000*12*30*24*60*60*1000));
+    return Signal;
   }
-  expires = "; expires=" + date.toUTCString();
-  document.cookie = name + "=" + (value || "")  + expires + "; path=/";
-}
-
-Signal.prototype._get_cookie = function(name) {
-  var nameEQ = name + "=";
-  var ca = document.cookie.split(';');
-  for(var i=0;i < ca.length;i++) {
-    var c = ca[i];
-    while (c.charAt(0)==' ') c = c.substring(1,c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-  }
-  return null;
-}
-
-Signal.prototype._delete_cookie = function(name) {
-  document.cookie = name+'=; Max-Age=-99999999;';
-}
-
-if (!module) {
-  // browser
-  new Signal().signal.init('{{.ID}}');
-} else {
-  return Signal;
-}
 }());
 
 if (module && module.exports) {
