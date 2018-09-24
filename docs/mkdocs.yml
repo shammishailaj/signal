@@ -26,3 +26,6 @@ theme:
 
 nav:
   - index.md
+  - web.md
+  - www.md
+  - api.md

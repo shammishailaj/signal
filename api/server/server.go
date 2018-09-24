@@ -55,9 +55,16 @@ func New(databaseURL string) (*Server, error) {
 	c := cors.Default()
 	router.Use(c.Handler)
 
+	// public routes
 	router.Get("/js", ret.trackerJSRoute)
 	router.Get("/pixel.gif", ret.pixelGIFRoute)
 	router.Post("/events", ret.eventsRoute)
+
+	// API routes
+	router.Route("/api/v1", func(r chi.Router) {
+		r.Post("/login", ret.loginRoute)
+		r.Use(ret.authMiddleware)
+	})
 
 	return ret, nil
 }

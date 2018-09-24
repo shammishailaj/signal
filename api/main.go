@@ -10,14 +10,15 @@ import (
 	_ "github.com/astrolib/godotenv/autoload"
 )
 
-func checkEnv() {
-	required := []string{
-		"DATABASE_URL",
-	}
+var RequiredEnv = []string{
+	"DATABASE_URL",
+	"JWT_SECRET",
+}
 
-	for _, r := range required {
-		if os.Getenv(r) == "" {
-			log.With("var", r).Fatal("Missing environment variable")
+func checkEnv() {
+	for _, required := range RequiredEnv {
+		if os.Getenv(required) == "" {
+			log.With("var", required).Fatal("Missing environment variable")
 		}
 	}
 

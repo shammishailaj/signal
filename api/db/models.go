@@ -6,6 +6,12 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+type Account struct {
+	gorm.Model
+	Username string
+	Password string
+}
+
 type Project struct {
 	gorm.Model
 	Name string
