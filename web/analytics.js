@@ -28,9 +28,9 @@ var ___signal = (function() {
     this.history_hash_mode = options.history_hash_mode || false;
     this.debug = options.debug || false;
     this.events = events;
-    if (!uid) {
-      uid = this._uuid();
-      this._set_cookie('_signal', uid);
+    if (!aid) {
+      aid = this._uuid();
+      this._set_cookie('_signal', aid);
     }
     this.aid = aid;
     this.location = '';
@@ -280,14 +280,14 @@ var ___signal = (function() {
     document.cookie = name+'=; Max-Age=-99999999;';
   }
 
-  if (!module) {
+  if (typeof module === 'undefined') {
     // browser
-    new Signal().signal.init('{{.ID}}');
+    new Signal().init('{{.ID}}');
   } else {
     return Signal;
   }
 }());
 
-if (module && module.exports) {
+if (typeof module !== 'undefined' && module.exports) {
   module.exports = ___signal;
 }
