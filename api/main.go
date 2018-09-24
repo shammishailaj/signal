@@ -6,8 +6,8 @@ import (
 
 	"github.com/astrocorp42/astroflow-go"
 	"github.com/astrocorp42/astroflow-go/log"
+	"github.com/astrocorp42/signal/api/server"
 	_ "github.com/astrolib/godotenv/autoload"
-	"gitlab.com/astrocorp/signal/api/server"
 )
 
 func checkEnv() {
@@ -30,16 +30,15 @@ func checkEnv() {
 
 func main() {
 	var err error
-	flagMigrate := flag.Bool("migrate", false, "auto migrate")
-	flagPort := flag.String("p", os.Getenv("PORT"), "port to listen to")
-	flag.Parse()
-
 	// init
 	log.Config(
 		astroflow.SetFormatter(astroflow.NewConsoleFormatter()),
 	)
-
 	checkEnv()
+
+	flagMigrate := flag.Bool("migrate", false, "auto migrate")
+	flagPort := flag.String("p", os.Getenv("PORT"), "port to listen to")
+	flag.Parse()
 
 	srv, err := server.New(os.Getenv("DATABASE_URL"))
 	if err != nil {

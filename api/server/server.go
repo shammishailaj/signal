@@ -7,6 +7,7 @@ import (
 
 	"github.com/astrocorp42/astroflow-go"
 	"github.com/astrocorp42/astroflow-go/log"
+	"github.com/astrocorp42/signal/api/db"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 	"github.com/jinzhu/gorm"
@@ -66,5 +67,5 @@ func (srv *Server) Run(port string) error {
 }
 
 func (srv *Server) AutoMigrate() error {
-	return nil
+	return srv.DB.AutoMigrate(&db.Project{}, &db.AnalyticsEvent{}).Error
 }

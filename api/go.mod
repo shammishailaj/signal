@@ -1,4 +1,4 @@
-module gitlab.com/astrocorp/signal/api
+module github.com/astrocorp42/signal/api
 
 require (
 	cloud.google.com/go v0.28.0 // indirect

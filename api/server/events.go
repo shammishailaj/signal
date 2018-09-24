@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"time"
 )
 
 type EncodedEvent struct {
@@ -13,7 +14,7 @@ type EncodedEvent struct {
 }
 
 type Event struct {
-	Timestamp   uint64      `json:"timestmap"`
+	Timestamp   time.Time   `json:"timestmap"`
 	TrackingID  string      `json:"id"`
 	Type        string      `json:"type"`
 	AnonymousID string      `json:"aid"`
