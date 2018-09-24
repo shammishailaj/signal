@@ -1,35 +1,42 @@
-function Signal(tracking_id, options) {
-  var uid = this._get_cookie('_signal');
-  var events = [];
-  if (window.localStorage) {
-    events = localStorage.getItem('_signal_events') || [];
-  }
+var ___signal = (function() {
 
-  this.tracking_id = tracking_id;
-  this.api_endpoint = options.history_hash_mode || 'http://localhost:9090';
-  this.history_hash_mode = options.history_hash_mode || false;
-  this.debug = options.debug || false;
-  this.events = events;
-  if (!uid) {
-    uid = this._uuid();
-    this._set_cookie('_signal', uid);
-  }
-  this.uid = uid;
-  this.location = '';
-  this._track_page();
+function Signal() {}
 
-  setInterval(this._track_page_change.bind(this), 200);
+Signal.prototype.init = function(tracking_id, options) {
+  if (!window.$signal) {
+    var uid = this._get_cookie('_signal');
+    var events = [];
+    if (window.localStorage) {
+      events = localStorage.getItem('_signal_events') || [];
+    }
 
-  //listen for link click events at the document level
-  if (document.addEventListener) {
-    document.addEventListener('click', this._intercept_click.bind(this), true);
-    document.addEventListener('submit', this._intercept_submit.bind(this), true);
-    document.addEventListener('beforeunload', this._intercept_beforunload.bind(this), true);
-  } else if (document.attachEvent) {
-    document.attachEvent('onclick', this._intercept_click.bind(this));
-    document.attachEvent('onsubmit', this.intercept_submit.bind(this));
+    this.tracking_id = tracking_id;
+    this.api_endpoint = options.history_hash_mode || 'http://localhost:9090';
+    this.history_hash_mode = options.history_hash_mode || false;
+    this.debug = options.debug || false;
+    this.events = events;
+    if (!uid) {
+      uid = this._uuid();
+      this._set_cookie('_signal', uid);
+    }
+    this.uid = uid;
+    this.location = '';
+    this._track_page();
+
+    setInterval(this._track_page_change.bind(this), 200);
+
+    //listen for link click events at the document level
+    if (document.addEventListener) {
+      document.addEventListener('click', this._intercept_click.bind(this), true);
+      document.addEventListener('submit', this._intercept_submit.bind(this), true);
+      document.addEventListener('beforeunload', this._intercept_beforunload.bind(this), true);
+    } else if (document.attachEvent) {
+      document.attachEvent('onclick', this._intercept_click.bind(this));
+      document.attachEvent('onsubmit', this.intercept_submit.bind(this));
+    }
+    setInterval(this.flush.bind(this), 2000);
+    window.$signal = this;
   }
-  setInterval(this.flush.bind(this), 2000);
 }
 
 
@@ -257,10 +264,14 @@ Signal.prototype._delete_cookie = function(name) {
   document.cookie = name+'=; Max-Age=-99999999;';
 }
 
-function init(tracking_id, options) {
-  if (!window.$signal) {
-    window.$signal = new Signal(tracking_id, options);
-  }
+if (!module) {
+  // browser
+  new Signal().signal.init('{{.ID}}');
+} else {
+  return Signal;
 }
+}());
 
-init('sysy', { debug: true });
+if (module && module.exports) {
+  module.exports = ___signal;
+}
