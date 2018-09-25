@@ -85,12 +85,15 @@ func processEventsPayload(srv *Server, payload []byte, ua, ip string) {
 		return
 	}
 
+	n := 0
 	for _, event := range events {
+		if event.Type != "page_view" {
+			continue
+		}
 		data, err := json.Marshal(event.Data)
 		if err != nil {
 			log.Error(err.Error())
 			continue
-
 		}
 		ev := db.AnalyticsEvent{
 			ProjectID:   project.ID,
@@ -106,6 +109,9 @@ func processEventsPayload(srv *Server, payload []byte, ua, ip string) {
 		err = srv.DB.Create(&ev).Error
 		if err != nil {
 			log.Error(err.Error())
+			continue
 		}
+		n += 1
 	}
+	log.With("n", n).Info("events successfully saved")
 }
