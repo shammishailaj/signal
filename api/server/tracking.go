@@ -2,20 +2,24 @@ package server
 
 import (
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
+	"time"
 
 	"github.com/astrocorp42/astroflow-go/log"
+	"github.com/astrocorp42/signal/api/db"
 )
 
-type trackerT struct {
+type trackerTmplVar struct {
 	ID string
 }
 
 func (srv *Server) trackerJSRoute(w http.ResponseWriter, r *http.Request) {
 	trackingID := r.URL.Query().Get("id")
-	t := trackerT{trackingID}
+	t := trackerTmplVar{trackingID}
 
 	w.Header().Set("Content-Type", "text/javascript")
 	err := srv.Tmpl.Execute(w, t)
@@ -46,10 +50,62 @@ func (srv *Server) eventsRoute(w http.ResponseWriter, r *http.Request) {
 		log.Error(err.Error())
 		return
 	}
-	fmt.Println(string(body))
 	r.Body.Close()
+
+	parts := strings.Split(r.RemoteAddr, ":")
+	if len(parts) == 2 {
+		go processEventsPayload(srv, body, r.Header.Get("user-agent"), parts[0])
+	} else {
+		log.With("RemoteAddr", r.RemoteAddr).Error("invalid RemoteAddr")
+	}
 
 	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte("{}"))
+}
+
+func processEventsPayload(srv *Server, payload []byte, ua, ip string) {
+	now := time.Now().UTC()
+	events := []Event{}
+
+	err := json.Unmarshal(payload, &events)
+	if err != nil {
+		log.Error(err.Error())
+		return
+	}
+
+	if len(events) == 0 {
+		return
+	}
+
+	var project db.Project
+	err = srv.DB.First(&project, "tracking_id = ?", events[0].TrackingID).Error
+	if err != nil {
+		log.Error(err.Error())
+		return
+	}
+
+	for _, event := range events {
+		data, err := json.Marshal(event.Data)
+		if err != nil {
+			log.Error(err.Error())
+			continue
+
+		}
+		ev := db.AnalyticsEvent{
+			ProjectID:   project.ID,
+			ReceivedAt:  now,
+			UserAgent:   ua,
+			IP:          ip,
+			TrackingID:  event.TrackingID,
+			Type:        event.Type,
+			AnonymousID: event.AnonymousID,
+			Timestamp:   time.Unix(0, int64(time.Millisecond)*event.Timestamp).UTC(),
+			Data:        data,
+		}
+		err = srv.DB.Create(&ev).Error
+		if err != nil {
+			log.Error(err.Error())
+		}
+	}
 }
