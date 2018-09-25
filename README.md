@@ -13,6 +13,8 @@ Signal lets you automatically capture every user interaction: clicks, submits, t
 
 ---
 
+![Screenshot](docs/imgs/screenshot.png)
+
 
 ## Repo organization
 

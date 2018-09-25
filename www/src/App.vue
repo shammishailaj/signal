@@ -8,18 +8,18 @@
       :mini-variant="minidrawer"
       app v-if="is_authenticated()">
       <!--
-      <v-list class="pa-1">
+        <v-list class="pa-1">
         <v-list-tile v-if="minidrawer" @click.stop="minidrawer = !minidrawer">
-          <v-list-tile-action>
-            <v-icon>chevron_right</v-icon>
-          </v-list-tile-action>
+        <v-list-tile-action>
+        <v-icon>chevron_right</v-icon>
+        </v-list-tile-action>
         </v-list-tile>
         <v-list-tile-action v-if="!minidrawer">
-          <v-btn icon @click.stop="minidrawer = !minidrawer">
-            <v-icon>chevron_left</v-icon>
-          </v-btn>
+        <v-btn icon @click.stop="minidrawer = !minidrawer">
+        <v-icon>chevron_left</v-icon>
+        </v-btn>
         </v-list-tile-action>
-      </v-list>
+        </v-list>
       -->
       <v-list v-if="$route.path.indexOf('/projects/') === -1" dense>
         <v-list-tile
@@ -69,13 +69,23 @@
       </router-link>
 
       <v-spacer></v-spacer>
+
+      <v-btn
+        color="white"
+        outline
+        small
+        >
+        <v-icon left>restore</v-icon>
+        Last 30 days
+      </v-btn>
+
       <v-btn icon @click="logout">
         <v-icon>power_settings_new</v-icon>
       </v-btn>
     </v-toolbar>
 
     <v-content>
-        <router-view/>
+      <router-view/>
     </v-content>
 
   </v-app>
