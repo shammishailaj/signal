@@ -17,7 +17,10 @@
             @keyup.enter.native="login"
             ></v-text-field>
         </v-flex>
-        <v-btn color="primary" @click="login">Login</v-btn>
+        <v-btn
+          color="primary"
+          @click="login"
+          :loading="is_loading">Login</v-btn>
 
         <v-alert
         :value="error_msg !== ''"
@@ -37,9 +40,11 @@
 
 <script>
 import auth from '@/services/auth';
+import router from '@/router';
 
 export default {
   data: () => ({
+    is_loading: false,
     username: '',
     password: '',
     error_msg: '',
@@ -47,14 +52,16 @@ export default {
   }),
   methods: {
     async login() {
-      console.log(this.username, this.password);
+      this.is_loading = true;
       try {
         await auth.login(this.username, this.password);
         this.error_msg = '';
         this.success_msg = 'Success';
-        // change page
+        router.push('/');
       } catch (err) {
         this.error_msg = err.toString();
+      } finally {
+        this.is_loading = false;
       }
     },
   },

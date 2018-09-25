@@ -1,8 +1,91 @@
 <template>
   <v-app>
-    <router-view/>
+
+    <v-navigation-drawer
+      v-model="drawer"
+      fixed
+      clipped
+      :mini-variant="minidrawer"
+      app v-if="is_authenticated()">
+      <!--
+      <v-list class="pa-1">
+        <v-list-tile v-if="minidrawer" @click.stop="minidrawer = !minidrawer">
+          <v-list-tile-action>
+            <v-icon>chevron_right</v-icon>
+          </v-list-tile-action>
+        </v-list-tile>
+        <v-list-tile-action v-if="!minidrawer">
+          <v-btn icon @click.stop="minidrawer = !minidrawer">
+            <v-icon>chevron_left</v-icon>
+          </v-btn>
+        </v-list-tile-action>
+      </v-list>
+      -->
+      <v-list dense>
+        <v-list-tile
+          v-for="item in items"
+          :key="item.text"
+          :to="{path: `/${item.path}`}">
+          <v-list-tile-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>
+              {{ item.text }}
+            </v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+
+      <v-list id="drawer-other-links">
+        <v-list-tile to="/about">
+          <v-list-tile-title class="grey--text text--lighten-1">about</v-list-tile-title>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-toolbar color="cyan" dark dense fixed clipped-left app v-if="is_authenticated()">
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title class="mr-5 align-center">
+        <span class="title">Signal</span>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon @click="logout">
+        <v-icon>power_settings_new</v-icon>
+      </v-btn>
+    </v-toolbar>
+
+    <v-content>
+      <v-container fluid>
+        <router-view/>
+      </v-container>
+    </v-content>
+
   </v-app>
 </template>
+
+<script>
+import auth from '@/services/auth';
+
+export default {
+  data: () => ({
+    drawer: true,
+    minidrawer: false,
+    items: [
+      { icon: 'dashboard', text: 'Projects', path: 'projects' },
+      { icon: 'group', text: 'Accounts', path: 'accounts' },
+    ],
+  }),
+  methods: {
+    is_authenticated() {
+      return auth.is_authenticated();
+    },
+    logout() {
+      auth.logout();
+    },
+  },
+};
+</script>
 
 <style lang="scss">
 #app {
@@ -26,5 +109,11 @@
 
 .v-btn {
   border-radius: 4px;
+}
+
+#drawer-other-links {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
 }
 </style>
