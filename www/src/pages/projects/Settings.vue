@@ -1,4 +1,5 @@
 <template>
+  <v-container fluid>
   <v-flex xs12 sm6 offset-sm3 md4 offset-md4 v-if="project">
     <v-text-field
       label="Tracking ID"
@@ -10,6 +11,7 @@
         Delete project
       </v-btn>
   </v-flex>
+  </v-container>
 </template>
 
 <script>

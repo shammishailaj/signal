@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container fluid>
     <v-data-table
       class="elevation-1"
       hide-actions
@@ -11,7 +11,7 @@
         <td class="text-xs-left">{{ props.item }}</td>
       </template>
     </v-data-table>
-  </div>
+  </v-container>
 </template>
 
 <script>
