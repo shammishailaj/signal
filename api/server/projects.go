@@ -99,3 +99,22 @@ func (srv *Server) getProjectRoute(w http.ResponseWriter, r *http.Request) {
 
 	srv.resJSON(w, http.StatusOK, formatProject(project))
 }
+
+func (srv *Server) deleteProjectRoute(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.ParseUint(chi.URLParam(r, "project_id"), 10, 64)
+	if err != nil {
+		log.Error(err.Error())
+		srv.resError(w, 400, "invalid {project_id}")
+		return
+	}
+
+	project := db.Project{Model: gorm.Model{ID: uint(id)}}
+	err = srv.DB.Delete(&project).Error
+	if err != nil {
+		log.Error(err.Error())
+		srv.resError(w, 404, "not found")
+		return
+	}
+
+	srv.resJSON(w, http.StatusOK, map[string]string{})
+}

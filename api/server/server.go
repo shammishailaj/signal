@@ -97,7 +97,9 @@ func New(databaseURL string) (*Server, error) {
 
 		r.Get("/projects", ret.listProjectsRoute)
 		r.Post("/projects", ret.createProjectRoute)
+
 		r.Get("/projects/{project_id}", ret.getProjectRoute)
+		r.Delete("/projects/{project_id}", ret.deleteProjectRoute)
 	})
 
 	router.NotFound(func(w http.ResponseWriter, r *http.Request) {
