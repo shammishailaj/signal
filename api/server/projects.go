@@ -3,10 +3,13 @@ package server
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/astrocorp42/astroflow-go/log"
 	"github.com/astrocorp42/signal/api/db"
+	"github.com/go-chi/chi"
+	"github.com/jinzhu/gorm"
 	"github.com/segmentio/ksuid"
 )
 
@@ -76,4 +79,23 @@ func (srv *Server) createProjectRoute(w http.ResponseWriter, r *http.Request) {
 
 	res = formatProject(proj)
 	srv.resJSON(w, 201, res)
+}
+
+func (srv *Server) getProjectRoute(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.ParseUint(chi.URLParam(r, "project_id"), 10, 64)
+	if err != nil {
+		log.Error(err.Error())
+		srv.resError(w, 400, "invalid {project_id}")
+		return
+	}
+
+	project := db.Project{Model: gorm.Model{ID: uint(id)}}
+	err = srv.DB.First(&project).Error
+	if err != nil {
+		log.Error(err.Error())
+		srv.resError(w, 404, "not found")
+		return
+	}
+
+	srv.resJSON(w, http.StatusOK, formatProject(project))
 }
