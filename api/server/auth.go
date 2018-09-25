@@ -67,7 +67,8 @@ func (srv *Server) loginRoute(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		srv.resError(w, 400, err.Error())
+		log.Error(err.Error())
+		srv.resError(w, 400, "invalid data")
 		return
 	}
 

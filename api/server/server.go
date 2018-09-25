@@ -94,7 +94,9 @@ func New(databaseURL string) (*Server, error) {
 		r.Use(ret.authMiddleware)
 
 		r.Get("/accounts", ret.listAccountsRoute)
+
 		r.Get("/projects", ret.listProjectsRoute)
+		r.Post("/projects", ret.createProjectRoute)
 	})
 
 	router.NotFound(func(w http.ResponseWriter, r *http.Request) {
