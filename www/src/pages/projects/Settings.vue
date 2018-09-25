@@ -6,7 +6,9 @@
       readonly
       v-model="project.tracking_id"
       ></v-text-field>
-      <v-btn color="error" @click="delete_project">Delete project</v-btn>
+      <v-btn color="error" @click="delete_project" :loading="is_delete_loading">
+        Delete project
+      </v-btn>
   </v-flex>
 </template>
 
@@ -17,6 +19,7 @@ import router from '@/router';
 export default {
   data: () => ({
     is_loading: false,
+    is_delete_loading: false,
     project: null,
   }),
   async created() {
@@ -36,7 +39,7 @@ export default {
       }
     },
     async delete_project() {
-      this.is_loading = true;
+      this.is_delete_loading = true;
 
       try {
         await api.delete(`/api/v1/projects/${this.$route.params.project_id}`);
@@ -44,7 +47,7 @@ export default {
       } catch (err) {
         console.error(err);
       } finally {
-        this.is_loading = false;
+        this.is_delete_loading = false;
       }
     },
   },

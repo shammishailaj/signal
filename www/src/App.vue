@@ -21,7 +21,7 @@
         </v-list-tile-action>
       </v-list>
       -->
-      <v-list v-if="$route.path.indexOf('/projects/') === -1">
+      <v-list v-if="$route.path.indexOf('/projects/') === -1" dense>
         <v-list-tile
           v-for="item in items"
           :key="item.text"
@@ -37,7 +37,7 @@
         </v-list-tile>
       </v-list>
 
-      <v-list v-else>
+      <v-list v-else dense>
         <v-list-tile
           v-for="item in project_items"
           :key="item.text"
@@ -60,7 +60,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-toolbar color="cyan" dark dense fixed clipped-left app v-if="is_authenticated()">
+    <v-toolbar color="light-blue" dark dense fixed clipped-left app v-if="is_authenticated()">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <router-link to="/">
         <v-toolbar-title class="mr-5 align-center">
