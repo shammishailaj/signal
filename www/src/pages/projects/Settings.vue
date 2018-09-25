@@ -6,11 +6,13 @@
       readonly
       v-model="project.tracking_id"
       ></v-text-field>
+      <v-btn color="error" @click="delete_project">Delete project</v-btn>
   </v-flex>
 </template>
 
 <script>
 import api from '@/services/api';
+import router from '@/router';
 
 export default {
   data: () => ({
@@ -27,6 +29,18 @@ export default {
       try {
         const res = await api.get(`/api/v1/projects/${this.$route.params.project_id}`);
         this.project = res.data.data;
+      } catch (err) {
+        console.error(err);
+      } finally {
+        this.is_loading = false;
+      }
+    },
+    async delete_project() {
+      this.is_loading = true;
+
+      try {
+        await api.delete(`/api/v1/projects/${this.$route.params.project_id}`);
+        router.push('/');
       } catch (err) {
         console.error(err);
       } finally {

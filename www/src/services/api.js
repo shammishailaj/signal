@@ -36,6 +36,10 @@ class Api {
   post(url, data, options) {
     return this._client.post(url, data, options);
   }
+
+  delete(url, options) {
+    return this._client.delete(url, options);
+  }
 }
 
 export default new Api();
