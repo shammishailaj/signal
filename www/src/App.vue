@@ -46,9 +46,12 @@
 
     <v-toolbar color="cyan" dark dense fixed clipped-left app v-if="is_authenticated()">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title class="mr-5 align-center">
-        <span class="title">Signal</span>
-      </v-toolbar-title>
+      <router-link to="/">
+        <v-toolbar-title class="mr-5 align-center">
+          <span class="title">Signal</span>
+        </v-toolbar-title>
+      </router-link>
+
       <v-spacer></v-spacer>
       <v-btn icon @click="logout">
         <v-icon>power_settings_new</v-icon>
@@ -104,6 +107,13 @@ export default {
     &.router-link-exact-active {
       color: #42b983;
     }
+  }
+}
+
+.v-toolbar {
+  a {
+    color: white;
+    text-decoration: none;
   }
 }
 

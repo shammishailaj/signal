@@ -3,7 +3,8 @@ import Router from 'vue-router';
 
 import Accounts from '@/pages/Accounts.vue';
 import Login from '@/pages/Login.vue';
-import Projects from '@/pages/projects/Index.vue';
+import Projects from '@/pages/Projects.vue';
+import ProjectIndex from '@/pages/projects/Index.vue';
 
 import auth from '@/services/auth';
 
@@ -48,12 +49,6 @@ export default new Router({
       component: Login,
     },
     {
-      path: '/projects',
-      name: 'projects',
-      beforeEnter: requires_auth,
-      component: Projects,
-    },
-    {
       path: '/accounts',
       name: 'accounts',
       beforeEnter: requires_auth,
@@ -66,6 +61,23 @@ export default new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './pages/About.vue'),
+    },
+    {
+      path: '/projects',
+      name: 'projects',
+      beforeEnter: requires_auth,
+      component: Projects,
+    },
+    {
+      path: '/projects/:project_id',
+      beforeEnter: requires_auth,
+      children: [
+        {
+          path: '',
+          name: 'project_home',
+          component: ProjectIndex,
+        },
+      ],
     },
     { path: '*', redirect: '/' },
   ],
