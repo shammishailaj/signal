@@ -97,6 +97,11 @@ export default {
       { icon: 'settings', text: 'Settings', path: 'settings' },
     ],
   }),
+  created() {
+    if (this.$vuetify.breakpoint.mdAndDown) {
+      this.drawer = false;
+    }
+  },
   methods: {
     is_authenticated() {
       return auth.is_authenticated();
