@@ -21,11 +21,27 @@
         </v-list-tile-action>
       </v-list>
       -->
-      <v-list dense>
+      <v-list v-if="$route.path.indexOf('/projects/') === -1">
         <v-list-tile
           v-for="item in items"
           :key="item.text"
           :to="{path: `/${item.path}`}">
+          <v-list-tile-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>
+              {{ item.text }}
+            </v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+
+      <v-list v-else>
+        <v-list-tile
+          v-for="item in project_items"
+          :key="item.text"
+          :to="{path: `/projects/${$route.params.project_id}/${item.path}`}">
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
@@ -77,6 +93,10 @@ export default {
     items: [
       { icon: 'dashboard', text: 'Projects', path: 'projects' },
       { icon: 'group', text: 'Accounts', path: 'accounts' },
+    ],
+    project_items: [
+      { icon: 'home', text: 'Home', path: 'home' },
+      { icon: 'settings', text: 'Settings', path: 'settings' },
     ],
   }),
   methods: {

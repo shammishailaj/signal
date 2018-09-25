@@ -6,6 +6,7 @@ import Login from '@/pages/Login.vue';
 import Projects from '@/pages/Projects.vue';
 import ProjectIndex from '@/pages/projects/Index.vue';
 import ProjectLayout from '@/pages/projects/Layout.vue';
+import ProjectSettings from '@/pages/projects/Settings.vue';
 
 import auth from '@/services/auth';
 
@@ -76,8 +77,17 @@ export default new Router({
       children: [
         {
           path: '',
-          name: 'project_home',
+          redirect: 'home',
+        },
+        {
+          path: 'home',
+          name: 'project_index',
           component: ProjectIndex,
+        },
+        {
+          path: 'settings',
+          name: 'project_settings',
+          component: ProjectSettings,
         },
       ],
     },
