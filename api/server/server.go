@@ -67,7 +67,16 @@ func New(databaseURL string) (*Server, error) {
 	router.Use(middleware.RealIP)
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.Timeout(30 * time.Second))
-	c := cors.Default()
+	c := cors.New(cors.Options{
+		// AllowedOrigins: []string{"https://foo.com"}, // Use this to allow specific origin hosts
+		AllowedOrigins: []string{"*"},
+		// AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: true,
+		MaxAge:           3600, // Maximum value not ignored by any of major browsers
+	})
 	router.Use(c.Handler)
 
 	// tracker route
@@ -85,6 +94,7 @@ func New(databaseURL string) (*Server, error) {
 		r.Use(ret.authMiddleware)
 
 		r.Get("/accounts", ret.listAccountsRoute)
+		r.Get("/projects", ret.listProjectsRoute)
 	})
 
 	router.NotFound(func(w http.ResponseWriter, r *http.Request) {
