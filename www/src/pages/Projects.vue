@@ -1,5 +1,6 @@
 <template>
-  <v-layout text-xs-center>
+  <v-container grid-list-xl text-xs-center>
+  <v-layout row wrap text-xs-center>
 
     <v-flex xs12 sm4 text-xs-center
       class="card"
@@ -44,7 +45,9 @@
         </v-container>
       </v-card>
     </v-dialog>
+
   </v-layout>
+  </v-container>
 </template>
 
 
@@ -95,8 +98,6 @@ export default {
 <style scoped lang="scss">
 
 .card {
-  margin-right: 10px;
-  margin-left: 10px;
 
   a {
     text-decoration: none;

@@ -5,6 +5,7 @@ import Accounts from '@/pages/Accounts.vue';
 import Login from '@/pages/Login.vue';
 import Projects from '@/pages/Projects.vue';
 import ProjectIndex from '@/pages/projects/Index.vue';
+import ProjectLayout from '@/pages/projects/Layout.vue';
 
 import auth from '@/services/auth';
 
@@ -71,6 +72,7 @@ export default new Router({
     {
       path: '/projects/:project_id',
       beforeEnter: requires_auth,
+      component: ProjectLayout,
       children: [
         {
           path: '',
