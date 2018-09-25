@@ -7,19 +7,28 @@
           <v-text-field
             v-model="username"
             label="Username"
-            outline
             ></v-text-field>
         </v-flex>
         <v-flex xs12 sm8 offset-sm2 md6 offset-md3>
           <v-text-field
             v-model="password"
             label="Password"
-            outline
             type="password"
             @keyup.enter.native="login"
             ></v-text-field>
         </v-flex>
         <v-btn color="primary" @click="login">Login</v-btn>
+
+        <v-alert
+        :value="error_msg !== ''"
+        type="error">
+          {{ error_msg }}
+        </v-alert>
+        <v-alert
+        :value="success_msg !== ''"
+        type="success">
+          {{ success_msg }}
+        </v-alert>
 
       </v-card>
     </v-flex>
@@ -27,15 +36,26 @@
 </template>
 
 <script>
+import auth from '@/services/auth';
 
 export default {
   data: () => ({
     username: '',
     password: '',
+    error_msg: '',
+    success_msg: '',
   }),
   methods: {
-    login() {
+    async login() {
       console.log(this.username, this.password);
+      try {
+        await auth.login(this.username, this.password);
+        this.error_msg = '';
+        this.success_msg = 'Success';
+        // change page
+      } catch (err) {
+        this.error_msg = err.toString();
+      }
     },
   },
 };
