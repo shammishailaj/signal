@@ -16,7 +16,8 @@ type Account struct {
 
 type Project struct {
 	gorm.Model
-	Name string
+	Name       string
+	TrackingID string
 }
 
 type AnalyticsEvent struct {

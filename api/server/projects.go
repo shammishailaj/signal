@@ -7,12 +7,14 @@ import (
 
 	"github.com/astrocorp42/astroflow-go/log"
 	"github.com/astrocorp42/signal/api/db"
+	"github.com/segmentio/ksuid"
 )
 
 type projectRes struct {
-	Name      string    `json:"name"`
-	CreatedAt time.Time `json:"created_at"`
-	ID        uint      `json:"id"`
+	Name       string    `json:"name"`
+	CreatedAt  time.Time `json:"created_at"`
+	ID         uint      `json:"id"`
+	TrackingID string    `json:"tracking_id"`
 }
 
 type createProjectReq struct {
@@ -21,9 +23,10 @@ type createProjectReq struct {
 
 func formatProject(project db.Project) projectRes {
 	return projectRes{
-		Name:      project.Name,
-		CreatedAt: project.CreatedAt.UTC(),
-		ID:        project.ID,
+		Name:       project.Name,
+		CreatedAt:  project.CreatedAt.UTC(),
+		ID:         project.ID,
+		TrackingID: project.TrackingID,
 	}
 
 }
@@ -59,7 +62,10 @@ func (srv *Server) createProjectRoute(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	uid := ksuid.New()
+
 	proj.Name = req.Name
+	proj.TrackingID = uid.String()
 
 	err = srv.DB.Create(&proj).Error
 	if err != nil {
