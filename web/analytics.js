@@ -153,10 +153,11 @@ var ___signal = (function() {
   }
 
   Signal.prototype._send_events = function(cb) {
+    /*
     var request = null;
 
     if (window.XMLHttpRequest) {
-      // code for modern browsers
+  // code for modern browsers
       request = new XMLHttpRequest();
     } else {
       // code for old IE browsers
@@ -183,7 +184,14 @@ var ___signal = (function() {
 
     request.send(JSON.stringify(this.events));
     request = null;
-  }
+    */
+      var img = new Image()
+      img.src = this.api_endpoint + '/pixel?events='+this._encode_pixel_data(JSON.stringify(this.events));
+      img.style.display = 'none'
+      document.body.appendChild(img)
+      this.events = [];
+      cb();
+    }
 
 
   Signal.prototype._intercepted = function(e) {
