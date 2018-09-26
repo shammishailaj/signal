@@ -5,7 +5,7 @@
 ### Tracking snippet
 
 ```html
-<script type="text/javascript" async src="https://[SIGNAL_API_INSTANCE]/js?id=[PROJECT_TRACKING_ID]"></script>
+<script type="text/javascript" async src="https://[SIGNAL_API_HOST]/js?id=[PROJECT_TRACKING_ID]"></script>
 ```
 
 ### NPM
@@ -27,8 +27,7 @@ If you use a [Content Security Policy (CSP)](https://developer.mozilla.org/en-US
 to specify security policies for your website, Signal requires the following CSP directives
 (replace yoursignal.com with the URL to your Signal instance):
 ```
-script-src: yoursignal.com;
-connect-src: yoursignal.com;
-img-src: yoursignal.com;
+script-src: yoursignalapi.com;
+img-src: yoursignalapi.com;
 ```
 
