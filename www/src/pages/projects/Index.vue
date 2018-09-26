@@ -17,7 +17,7 @@
             class="elevation-1"
             >
             <template slot="items" slot-scope="props">
-              <td class="text-xs-left">{{ props.item.path }}</td>
+              <td class="text-xs-left">{{ props.item.page }}</td>
               <td class="text-xs-left">{{ props.item.views }}</td>
             </template>
           </v-data-table>
@@ -33,7 +33,7 @@
             class="elevation-1"
             >
             <template slot="items" slot-scope="props">
-              <td class="text-xs-left">{{ props.item.path }}</td>
+              <td class="text-xs-left">{{ props.item.referrer }}</td>
               <td class="text-xs-left">{{ props.item.views }}</td>
             </template>
           </v-data-table>
@@ -48,26 +48,13 @@
 import echarts from 'echarts';
 import Vue from 'vue';
 
+import api from '@/services/api';
+
 export default {
   data: () => ({
-    top_pages: [
-      { path: '/san', views: '2,802' },
-      { path: '/san/implementations', views: '517' },
-      { path: '/san/versions/v1.0.0', views: '365' },
-      { path: '/san/san-vs', views: '347' },
-      { path: '/rocket', views: '309' },
-      { path: '/', views: '250' },
-      { path: '/rocket/docker', views: '156' },
-    ],
-    top_referrers: [
-      { path: '(direct)', views: '3,241' },
-      { path: 'news.ycombinator.com', views: '625' },
-      { path: 'github.com', views: '330' },
-      { path: 'old.reddit.com', views: '237' },
-      { path: 't.co', views: '176' },
-      { path: 'kerkour.com', views: '42' },
-      { path: 'm.me', views: '17' },
-    ],
+    views: [],
+    top_pages: [],
+    top_referrers: [],
     page_headers: [
       {
         text: 'Top Pages',
@@ -99,18 +86,33 @@ export default {
     chart: null,
   }),
   created() {
-    Vue.nextTick(() => {
-      this.render_chart();
-    });
+    this.fetch_data();
   },
   methods: {
+    async fetch_data() {
+      try {
+        const results = await Promise.all([
+          api.get('/api/v1/views'),
+          api.get('/api/v1/pages'),
+          api.get('/api/v1/referrers'),
+        ]);
+        this.views = results[0].data.data;
+        this.top_pages = results[1].data.data;
+        this.top_referrers = results[2].data.data;
+        Vue.nextTick(() => {
+          this.render_chart();
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
     render_chart() {
-      const raw_data =[{ x: '2018-08-24T22:00:00.000Z', y: 28 }, { x: '2018-08-25T22:00:00.000Z', y: 12 }, { x: '2018-08-26T22:00:00.000Z', y: 121 }, { x: '2018-08-27T22:00:00.000Z', y: 48 }, { x: '2018-08-28T22:00:00.000Z', y: 383 }, { x: '2018-08-29T22:00:00.000Z', y: 106 }, { x: '2018-08-30T22:00:00.000Z', y: 50 }, { x: '2018-08-31T22:00:00.000Z', y: 8 }, { x: '2018-09-01T22:00:00.000Z', y: 15 }, { x: '2018-09-02T22:00:00.000Z', y: 38 }, { x: '2018-09-03T22:00:00.000Z', y: 55 }, { x: '2018-09-04T22:00:00.000Z', y: 59 }, { x: '2018-09-05T22:00:00.000Z', y: 18 }, { x: '2018-09-06T22:00:00.000Z', y: 74 }, { x: '2018-09-07T22:00:00.000Z', y: 22 }, { x: '2018-09-08T22:00:00.000Z', y: 36 }, { x: '2018-09-09T22:00:00.000Z', y: 89 }, { x: '2018-09-10T22:00:00.000Z', y: 48 }, { x: '2018-09-11T22:00:00.000Z', y: 77 }, { x: '2018-09-12T22:00:00.000Z', y: 47 }, { x: '2018-09-13T22:00:00.000Z', y: 49 }, { x: '2018-09-14T22:00:00.000Z', y: 5 }, { x: '2018-09-15T22:00:00.000Z', y: 7 }, { x: '2018-09-16T22:00:00.000Z', y: 10 }, { x: '2018-09-17T22:00:00.000Z', y: 2303 }, { x: '2018-09-18T22:00:00.000Z', y: 2998 }, { x: '2018-09-19T22:00:00.000Z', y: 1902 }, { x: '2018-09-20T22:00:00.000Z', y: 1506 }, { x: '2018-09-21T22:00:00.000Z', y: 832 }, { x: '2018-09-22T22:00:00.000Z', y: 729 }, { x: '2018-09-23T22:00:00.000Z', y: 652 }, { x: '2018-09-24T22:00:00.000Z', y: 438 }]; // eslint-disable-line
-      const series = raw_data.map(point => point.y);
-      const dates = raw_data.map((point) => {
-        const d = new Date(point.x);
+      const series = this.views.map(point => point.views);
+      const dates = this.views.map((point) => {
+        const d = new Date(point.date);
         return [d.getFullYear(), d.getMonth() + 1, d.getDate()].join('/');
       });
+      // console.log(series, dates);
 
       this.chart = echarts.init(document.getElementById('chart'));
 
