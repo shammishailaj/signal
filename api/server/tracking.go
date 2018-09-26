@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"path"
 	"strings"
 	"time"
 
@@ -90,6 +91,15 @@ func processEventsPayload(srv *Server, payload []byte, ua, ip string) {
 		if event.Type != "page_view" {
 			continue
 		}
+
+		// clean input data
+		if s, ok := event.Data["referrer"].(string); ok && s != "" {
+			event.Data["referrer"] = path.Clean(s)
+		}
+		if s, ok := event.Data["path"].(string); ok && s != "" {
+			event.Data["path"] = path.Clean(s)
+		}
+
 		data, err := json.Marshal(event.Data)
 		if err != nil {
 			log.Error(err.Error())

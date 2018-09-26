@@ -127,6 +127,7 @@ export default {
         xAxis: {
           type: 'category',
           data: dates,
+          boundaryGap: false,
         },
         yAxis: {
           type: 'value',
