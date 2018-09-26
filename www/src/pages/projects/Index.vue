@@ -88,6 +88,12 @@ export default {
   created() {
     this.fetch_data();
   },
+  mounted() {
+    window.addEventListener('resize', this.handleResize);
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.handleResize);
+  },
   methods: {
     async fetch_data() {
       try {
@@ -104,6 +110,12 @@ export default {
         });
       } catch (error) {
         console.error(error);
+      }
+    },
+    handleResize() {
+      if (this.chart) {
+        console.log('resize');
+        this.chart.resize();
       }
     },
     render_chart() {
