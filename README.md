@@ -10,6 +10,7 @@ Signal lets you automatically capture every user interaction: clicks, submits, t
 
 1. [Repo organization](#repo-organization)
 2. [Documentation](#documentation)
+3. [Roadmap](#roadmap)
 
 ---
 
@@ -31,3 +32,8 @@ This repository is splitted into the following components:
 ## Documentation
 
 See [https://astrocorp.net/signal](https://astrocorp.net/signal)
+
+
+## Roadmap
+
+See [https://github.com/astrocorp42/signal/projects](https://github.com/astrocorp42/signal/projects)
