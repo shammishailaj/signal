@@ -100,6 +100,10 @@ func New(databaseURL string) (*Server, error) {
 
 		r.Get("/projects/{project_id}", ret.getProjectRoute)
 		r.Delete("/projects/{project_id}", ret.deleteProjectRoute)
+
+		r.Get("/views", ret.getViewsData)
+		r.Get("/pages", ret.getPagesData)
+		r.Get("/referrers", ret.getReferrersData)
 	})
 
 	router.NotFound(func(w http.ResponseWriter, r *http.Request) {
