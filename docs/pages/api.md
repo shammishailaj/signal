@@ -1,5 +1,7 @@
 # API
 
+[![Docker image](https://img.shields.io/badge/docker-astrocorp/signal__api-blue.svg)](https://hub.docker.com/r/astrocorp/signal_api)
+
 ## Installation
 
 ### With Docker
