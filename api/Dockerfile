@@ -13,6 +13,7 @@ FROM scratch
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /signal/dist/signal /signal/signal
 COPY ca-certificates.crt /etc/ssl/certs/
+COPY analytics.min.js /signal/
 
 USER astrocorp
 
