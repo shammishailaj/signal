@@ -36,4 +36,4 @@ See [https://astrocorp.net/signal](https://astrocorp.net/signal)
 
 ## Roadmap
 
-See [https://github.com/astrocorp42/signal/projects](https://github.com/astrocorp42/signal/projects)
+See [https://github.com/astrocorp42/signal/projects/1](https://github.com/astrocorp42/signal/projects/1)
