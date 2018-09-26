@@ -19,4 +19,5 @@ USER astrocorp
 
 WORKDIR /signal
 
+EXPOSE 8080
 CMD ["./signal"]
