@@ -7,3 +7,5 @@ trading information for free access to web services, and then complaining when t
 crappy things with that data.
 
 **We need to stop giving away our data and our users' privacy for free access to a tool.**
+
+![Screenshot](imgs/screenshot.png)
