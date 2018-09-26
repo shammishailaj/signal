@@ -92,9 +92,9 @@ export default {
     async fetch_data() {
       try {
         const results = await Promise.all([
-          api.get('/api/v1/views'),
-          api.get('/api/v1/pages'),
-          api.get('/api/v1/referrers'),
+          api.get(`/api/v1/projects/${this.$route.params.project_id}/views`),
+          api.get(`/api/v1/projects/${this.$route.params.project_id}/pages`),
+          api.get(`/api/v1/projects/${this.$route.params.project_id}/referrers`),
         ]);
         this.views = results[0].data.data;
         this.top_pages = results[1].data.data;
