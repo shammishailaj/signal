@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="rocket logo" src="https://astrocorp.net/imgs/landing/signal_380x380.png" height="180" />
+  <img alt="signal logo" src="https://astrocorp.net/imgs/landing/signal_380x380.png" height="180" />
   <h2 align="center">Signal</h2>
   <p align="center">Simple and beautiful Analytics</p>
 </p>
