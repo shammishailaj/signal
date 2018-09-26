@@ -6,7 +6,7 @@ build:
 	go build -o dist/signal
 
 static:
-	CGO_ENABLED=0 go build -a -installsuffix cgo -o dist/signal
+	CGO_ENABLED=0 go build -a -installsuffix cgo -ldflags="-w -s" -o dist/signal
 
 assets:
 	cp ../web/analytics.min.js .

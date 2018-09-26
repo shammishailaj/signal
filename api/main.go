@@ -32,7 +32,7 @@ func checkEnv() {
 	// optional env
 	port := os.Getenv("PORT")
 	if port == "" {
-		os.Setenv("PORT", "9090")
+		os.Setenv("PORT", "8080")
 	}
 }
 

@@ -1,4 +1,5 @@
 FROM golang:1.11 AS builder
+RUN useradd -u 10001 astrocorp
 WORKDIR /signal
 COPY . ./
 RUN make static
@@ -7,17 +8,14 @@ RUN make static
 ## Image
 ####################################################################################################
 
-FROM alpine:latest
+FROM scratch
 
-RUN apk update && apk upgrade && \
-    apk add --no-cache bash git openssh-client ca-certificates
-
-COPY --from=builder /signal/dist/signal /bin/signal
-
-RUN adduser -D -g '' astrocorp
+COPY --from=builder /etc/passwd /etc/passwd
+COPY --from=builder /signal/dist/signal /signal/signal
+COPY ca-certificates.crt /etc/ssl/certs/
 
 USER astrocorp
 
 WORKDIR /signal
 
-CMD ["signal"]
+CMD ["./signal"]
