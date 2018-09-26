@@ -3,7 +3,6 @@ package server
 import (
 	"encoding/base64"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"path"
@@ -36,7 +35,12 @@ func (srv *Server) pixelGIFRoute(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Error(err.Error())
 		} else {
-			fmt.Println(decoded)
+			parts := strings.Split(r.RemoteAddr, ":")
+			if len(parts) == 2 {
+				go processEventsPayload(srv, decoded, r.Header.Get("user-agent"), parts[0])
+			} else {
+				log.With("RemoteAddr", r.RemoteAddr).Error("invalid RemoteAddr")
+			}
 		}
 	}
 

@@ -68,9 +68,7 @@ func New(databaseURL string) (*Server, error) {
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.Timeout(30 * time.Second))
 	c := cors.New(cors.Options{
-		// AllowedOrigins: []string{"https://foo.com"}, // Use this to allow specific origin hosts
-		AllowedOrigins: []string{"*"},
-		// AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
+		AllowedOrigins:   []string{"*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		ExposedHeaders:   []string{"Link"},
@@ -82,7 +80,7 @@ func New(databaseURL string) (*Server, error) {
 	// tracker route
 	router.Get("/js", ret.trackerJSRoute)
 	// tracking routes
-	router.Get("/pixel.gif", ret.pixelGIFRoute)
+	router.Get("/pixel", ret.pixelGIFRoute)
 	router.Post("/events", ret.eventsRoute)
 
 	// API routes
