@@ -10,3 +10,9 @@
 ```bash
 docker pull astrocorp/signal_www
 ```
+
+## Usage
+
+```bash
+docker run -d -p 8080:80 astrocorp/signal_www
+```
