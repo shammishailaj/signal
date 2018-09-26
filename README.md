@@ -18,7 +18,7 @@ Signal lets you automatically capture every user interaction: clicks, submits, t
 
 ## Repo organization
 
-This repo is splitted into the following components:
+This repository is splitted into the following components:
 
 | Directory |  Description | Documentation |
 | --------- | ------------ | ------------- |
