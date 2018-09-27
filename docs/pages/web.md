@@ -17,7 +17,7 @@ npm i -s @astrocorp/signal
 ```javascript
 import signal from '@astrocorp/signal';
 
-signal.init('[PROJECT_TRACKING_ID]');
+signal.init('[PROJECT_TRACKING_ID]', { endpoint: '[SIGNAL_API_HOST]' });
 ```
 
 
