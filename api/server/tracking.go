@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"path"
 	"strings"
 	"time"
 
@@ -99,10 +98,10 @@ func processEventsPayload(srv *Server, payload []byte, ua, ip string) {
 
 		// clean input data
 		if s, ok := event.Data["referrer"].(string); ok && s != "" {
-			event.Data["referrer"] = path.Clean(s)
+			event.Data["referrer"] = strings.TrimRight(s, "/")
 		}
 		if s, ok := event.Data["path"].(string); ok && s != "" {
-			event.Data["path"] = path.Clean(s)
+			event.Data["path"] = strings.TrimRight(s, "/")
 		}
 
 		data, err := json.Marshal(event.Data)
