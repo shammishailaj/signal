@@ -22,7 +22,7 @@ func (srv *Server) trackerJSRoute(w http.ResponseWriter, r *http.Request) {
 	trackingID := r.URL.Query().Get("id")
 	proto := "https://"
 	host := r.Host
-	if strings.Index(host, "localhost") == 0 { // TODO: improve
+	if strings.Index(host, "localhost") == 0 {
 		proto = "http://"
 	}
 	t := trackerTmplVar{ID: trackingID, Endpoint: proto + host}
