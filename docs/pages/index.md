@@ -14,5 +14,6 @@ crappy things with that data.
 ## Quickstart
 
 1. [Launch the API](api)
-2. [Launch the dashboard](www)
-3. [Install the tracking library](web)
+2. Create an user
+3. [Launch the dashboard](www)
+4. [Install the tracking library](web)

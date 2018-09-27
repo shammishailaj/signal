@@ -1,4 +1,7 @@
 import axios from 'axios';
+import store from 'store';
+
+import router from '@/router';
 
 class Api {
   constructor() {
@@ -29,16 +32,55 @@ class Api {
     return header;
   }
 
-  get(url, options) {
-    return this._client.get(url, options);
+  async get(url, options) {
+    let res = null;
+
+    try {
+      res = await this._client.get(url, options);
+    } catch (err) {
+      if (this._token && err.response.status === 401) {
+        this.logout();
+      } else {
+        throw err;
+      }
+    }
+    return res;
   }
 
-  post(url, data, options) {
-    return this._client.post(url, data, options);
+  async post(url, data, options) {
+    let res = null;
+
+    try {
+      res = await this._client.post(url, data, options);
+    } catch (err) {
+      if (this._token && err.response.status === 401) {
+        this.logout();
+      } else {
+        throw err;
+      }
+    }
+    return res;
   }
 
-  delete(url, options) {
-    return this._client.delete(url, options);
+  async delete(url, options) {
+    let res = null;
+
+    try {
+      res = await this._client.delete(url, options);
+    } catch (err) {
+      if (this._token && err.response.status === 401) {
+        this.logout();
+      } else {
+        throw err;
+      }
+    }
+    return res;
+  }
+
+  logout() {
+    store.remove('signal_token');
+    this._token = null;
+    router.push('/login');
   }
 }
 
