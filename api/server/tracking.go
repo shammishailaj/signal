@@ -62,7 +62,7 @@ func (srv *Server) eventsRoute(w http.ResponseWriter, r *http.Request) {
 	if len(parts) == 2 {
 		go processEventsPayload(srv, body, r.Header.Get("user-agent"), parts[0])
 	} else {
-		log.With("RemoteAddr", r.RemoteAddr).Error("invalid RemoteAddr")
+		go processEventsPayload(srv, body, r.Header.Get("user-agent"), r.RemoteAddr)
 	}
 
 	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
