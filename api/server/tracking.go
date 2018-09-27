@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 
@@ -98,7 +99,12 @@ func processEventsPayload(srv *Server, payload []byte, ua, ip string) {
 
 		// clean input data
 		if s, ok := event.Data["referrer"].(string); ok && s != "" && s != "/" {
-			event.Data["referrer"] = strings.TrimRight(s, "/")
+			u, err := url.Parse(s)
+			if err == nil {
+				event.Data["referrer"] = u.Host
+			} else {
+				event.Data["referrer"] = ""
+			}
 		}
 		if s, ok := event.Data["path"].(string); ok && s != "" && s != "/" {
 			event.Data["path"] = strings.TrimRight(s, "/")
