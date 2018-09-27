@@ -9,3 +9,10 @@ crappy things with that data.
 **We need to stop giving away our data and our users' privacy for free access to a tool.**
 
 ![Screenshot](imgs/screenshot.png)
+
+
+## Quickstart
+
+1. [Launch the API](api)
+2. [Launch the dashboard](www)
+3. [Install the tracking library](web)
