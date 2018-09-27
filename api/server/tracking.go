@@ -14,12 +14,18 @@ import (
 )
 
 type trackerTmplVar struct {
-	ID string
+	ID       string
+	Endpoint string
 }
 
 func (srv *Server) trackerJSRoute(w http.ResponseWriter, r *http.Request) {
 	trackingID := r.URL.Query().Get("id")
-	t := trackerTmplVar{trackingID}
+	proto := "https://"
+	host := r.Host
+	if strings.Index(host, "localhost") == 0 { // TODO: improve
+		proto = "http://"
+	}
+	t := trackerTmplVar{ID: trackingID, Endpoint: proto + host}
 
 	w.Header().Set("Content-Type", "text/javascript")
 	err := srv.Tmpl.Execute(w, t)
