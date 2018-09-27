@@ -24,7 +24,7 @@ var ___signal = (function() {
     }
 
     this.tracking_id = tracking_id;
-    this.api_endpoint = options.history_hash_mode || 'http://localhost:9090';
+    this.endpoint = options.endpoint;
     this.history_hash_mode = options.history_hash_mode || false;
     this.debug = options.debug || false;
     this.events = events;
@@ -186,7 +186,7 @@ var ___signal = (function() {
     request = null;
     */
       var img = new Image()
-      img.src = this.api_endpoint + '/pixel?events='+this._encode_pixel_data(JSON.stringify(this.events));
+      img.src = this.endpoint + '/pixel?events='+this._encode_pixel_data(JSON.stringify(this.events));
       img.style.display = 'none'
       document.body.appendChild(img)
       this.events = [];
@@ -290,7 +290,7 @@ var ___signal = (function() {
 
   if (typeof module === 'undefined') {
     // browser
-    new Signal().init('{{.ID}}');
+    new Signal().init('{{.ID}}', { endpoint: '{{.Endpoint}}'});
   } else {
     return Signal;
   }
