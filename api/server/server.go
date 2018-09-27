@@ -29,6 +29,7 @@ type Server struct {
 	Tmpl      *template.Template
 	Router    *chi.Mux
 	JWTSecret string
+	Host      string
 }
 
 var GIF = []byte{
@@ -61,6 +62,7 @@ func New(databaseURL string) (*Server, error) {
 		Tmpl:      tmpl,
 		Router:    router,
 		JWTSecret: os.Getenv("JWT_SECRET"),
+		Host:      os.Getenv("HOST"),
 	}
 
 	router.Use(astroflow.HTTPHandler(log.With()))

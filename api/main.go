@@ -20,6 +20,7 @@ import (
 var RequiredEnv = []string{
 	"DATABASE_URL",
 	"JWT_SECRET",
+	"HOST",
 }
 
 func checkEnv() {
