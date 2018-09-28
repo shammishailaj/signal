@@ -121,7 +121,7 @@ var ___signal = (function() {
       this.location = page.path;
     }
 
-    this._push_event('page_view', page);
+    this._push_event('page', page);
   }
 
 
