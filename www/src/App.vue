@@ -6,7 +6,8 @@
       fixed
       clipped
       :mini-variant="minidrawer"
-      app v-if="is_authenticated()">
+      app v-if="is_authenticated()"
+      width="230">
       <!--
         <v-list class="pa-1">
         <v-list-tile v-if="minidrawer" @click.stop="minidrawer = !minidrawer">
