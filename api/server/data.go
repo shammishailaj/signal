@@ -15,13 +15,15 @@ type viewsData struct {
 }
 
 type pagesData struct {
-	Page  string `json:"page" gorm:"page"`
-	Views uint64 `json:"views" gorm:"views"`
+	Page    string `json:"page" gorm:"page"`
+	Views   uint64 `json:"views" gorm:"views"`
+	Uniques uint64 `json:"uniques" gorm:"uniques"`
 }
 
 type referrersData struct {
 	Referrer string `json:"referrer" gorm:"referrer"`
 	Views    uint64 `json:"views" gorm:"views"`
+	Uniques  uint64 `json:"uniques" gorm:"uniques"`
 }
 
 func (srv *Server) getViewsData(w http.ResponseWriter, r *http.Request) {
@@ -58,11 +60,16 @@ func (srv *Server) getPagesData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	query := `SELECT data->>'path' AS "page", count(*) AS "views"
-	FROM analytics_events
-	WHERE type='page_view' AND timestamp > current_date - interval '30' day AND project_id = ?
+	query := `SELECT page, COUNT(*) AS "views", COUNT(DISTINCT aid) as "uniques"
+	FROM (
+		SELECT data->>'path' AS "page", anonymous_id AS "aid"
+		FROM analytics_events
+		WHERE type='page_view' AND timestamp > current_date - interval '30' day AND project_id = ?
+	) AS sub
 	GROUP BY page
-	ORDER BY views DESC;`
+	ORDER by views DESC
+	LIMIT 15;
+	`
 
 	err = srv.DB.Raw(query, id).Scan(&data).Error
 	if err != nil {
@@ -83,12 +90,16 @@ func (srv *Server) getReferrersData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	query := `SELECT data->>'referrer' AS "referrer", count(*) AS "views"
-	FROM analytics_events
-	WHERE type='page_view' AND timestamp > current_date - interval '30' day AND project_id = ?
+	query := `SELECT referrer, COUNT(*) AS "views", COUNT(DISTINCT aid) as "uniques"
+	FROM (
+		SELECT data->>'referrer' AS "referrer", anonymous_id AS "aid"
+		FROM analytics_events
+		WHERE type='page_view' AND timestamp > current_date - interval '30' day AND project_id = ?
+	) AS sub
 	GROUP BY referrer
-	ORDER BY views DESC;`
-
+	ORDER by views DESC
+	LIMIT 15;
+	`
 	err = srv.DB.Raw(query, id).Scan(&data).Error
 	if err != nil {
 		log.Error(err.Error())
