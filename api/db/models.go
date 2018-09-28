@@ -42,8 +42,8 @@ func (ev AnalyticsEvent) GetData() (interface{}, error) {
 	var err error
 
 	switch ev.Type {
-	case "page_view":
-		var pv PageView
+	case "page":
+		var pv Page
 		err = json.Unmarshal(ev.Data, &pv)
 		return pv, err
 	default:
@@ -56,7 +56,7 @@ type Device struct {
 	Height uint64 `json:"h"`
 }
 
-type PageView struct {
+type Page struct {
 	Referrer string `json:"referrer"`
 	Device   Device `json:"device"`
 	Domain   string `json:"domain"`

@@ -37,7 +37,7 @@ func (srv *Server) getViewsData(w http.ResponseWriter, r *http.Request) {
 
 	query := `SELECT date_trunc('day', timestamp) AS "date", count(*) AS "views"
 	FROM analytics_events
-	WHERE type='page_view' AND timestamp > current_date - interval '30' day AND project_id = ?
+	WHERE type='page' AND timestamp > current_date - interval '30' day AND project_id = ?
 	GROUP BY 1
 	ORDER BY date`
 
@@ -64,7 +64,7 @@ func (srv *Server) getPagesData(w http.ResponseWriter, r *http.Request) {
 	FROM (
 		SELECT data->>'path' AS "page", anonymous_id AS "aid"
 		FROM analytics_events
-		WHERE type='page_view' AND timestamp > current_date - interval '30' day AND project_id = ?
+		WHERE type='page' AND timestamp > current_date - interval '30' day AND project_id = ?
 	) AS sub
 	GROUP BY page
 	ORDER by views DESC
@@ -94,7 +94,7 @@ func (srv *Server) getReferrersData(w http.ResponseWriter, r *http.Request) {
 	FROM (
 		SELECT data->>'referrer' AS "referrer", anonymous_id AS "aid"
 		FROM analytics_events
-		WHERE type='page_view' AND timestamp > current_date - interval '30' day AND project_id = ?
+		WHERE type='page' AND timestamp > current_date - interval '30' day AND project_id = ?
 	) AS sub
 	GROUP BY referrer
 	ORDER by views DESC

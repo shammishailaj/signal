@@ -93,7 +93,7 @@ func processEventsPayload(srv *Server, payload []byte, ua, ip string) {
 
 	n := 0
 	for _, event := range events {
-		if event.Type != "page_view" {
+		if event.Type != "page" {
 			continue
 		}
 
