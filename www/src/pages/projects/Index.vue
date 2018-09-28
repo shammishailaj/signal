@@ -19,6 +19,7 @@
             <template slot="items" slot-scope="props">
               <td class="text-xs-left">{{ props.item.page }}</td>
               <td class="text-xs-left">{{ props.item.views }}</td>
+              <td class="text-xs-left">{{ props.item.uniques }}</td>
             </template>
           </v-data-table>
         </v-card>
@@ -35,6 +36,7 @@
             <template slot="items" slot-scope="props">
               <td class="text-xs-left">{{ props.item.referrer }}</td>
               <td class="text-xs-left">{{ props.item.views }}</td>
+              <td class="text-xs-left">{{ props.item.uniques }}</td>
             </template>
           </v-data-table>
         </v-card>
@@ -68,6 +70,12 @@ export default {
         sortable: false,
         value: 'views',
       },
+      {
+        text: 'Uniques',
+        align: 'left',
+        sortable: false,
+        value: 'uniques',
+      },
     ],
     referrers_headers: [
       {
@@ -81,6 +89,12 @@ export default {
         align: 'left',
         sortable: false,
         value: 'views',
+      },
+      {
+        text: 'Uniques',
+        align: 'left',
+        sortable: false,
+        value: 'uniques',
       },
     ],
     chart: null,
@@ -114,7 +128,6 @@ export default {
     },
     handleResize() {
       if (this.chart) {
-        console.log('resize');
         this.chart.resize();
       }
     },
