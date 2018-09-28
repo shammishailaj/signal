@@ -8,7 +8,7 @@ const TOKEN_KEY = 'signal_token';
 class Auth {
   constructor() {
     this._token = store.get(TOKEN_KEY);
-    api._token = this._token;
+    api.token = this._token;
   }
 
   async login(username, password) {
@@ -34,7 +34,7 @@ class Auth {
   logout() {
     store.remove(TOKEN_KEY);
     this._token = null;
-    api._token = null;
+    api.token = null;
     router.push('/login');
   }
 
