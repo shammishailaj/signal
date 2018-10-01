@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/astrocorp42/astroflow-go/log"
-	"github.com/astrocorp42/signal/api/db"
+	"github.com/bloom42/astroflow-go/log"
+	"github.com/bloom42/signal/api/db"
 	"github.com/go-chi/chi"
 	"github.com/jinzhu/gorm"
 	"github.com/segmentio/ksuid"

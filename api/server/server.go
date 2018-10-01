@@ -8,9 +8,9 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/astrocorp42/astroflow-go"
-	"github.com/astrocorp42/astroflow-go/log"
-	"github.com/astrocorp42/signal/api/db"
+	"github.com/bloom42/astroflow-go"
+	"github.com/bloom42/astroflow-go/log"
+	"github.com/bloom42/signal/api/db"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"

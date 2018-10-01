@@ -3,8 +3,8 @@ package server
 import (
 	"net/http"
 
-	"github.com/astrocorp42/astroflow-go/log"
-	"github.com/astrocorp42/signal/api/db"
+	"github.com/bloom42/astroflow-go/log"
+	"github.com/bloom42/signal/api/db"
 )
 
 func (srv *Server) listAccountsRoute(w http.ResponseWriter, r *http.Request) {

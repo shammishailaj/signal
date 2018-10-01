@@ -1,6 +1,6 @@
 .PHONY: assets build dev docker static
 
-DOCKER_IMAGE = "astrocorp/signal_api"
+DOCKER_IMAGE = "bloom42/signal_api"
 
 build:
 	go build -o dist/signal

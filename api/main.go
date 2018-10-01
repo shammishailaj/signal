@@ -8,11 +8,11 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/astrocorp42/astroflow-go"
-	"github.com/astrocorp42/astroflow-go/log"
-	"github.com/astrocorp42/signal/api/db"
-	"github.com/astrocorp42/signal/api/server"
-	"github.com/astrocorp42/signal/api/util"
+	"github.com/bloom42/astroflow-go"
+	"github.com/bloom42/astroflow-go/log"
+	"github.com/bloom42/signal/api/db"
+	"github.com/bloom42/signal/api/server"
+	"github.com/bloom42/signal/api/util"
 	_ "github.com/astrolib/godotenv/autoload"
 	"golang.org/x/crypto/ssh/terminal"
 )
