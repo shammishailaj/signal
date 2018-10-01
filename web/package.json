@@ -1,5 +1,5 @@
 {
-  "name": "@astrocorp/signal",
+  "name": "@bloom42/signal",
   "version": "0.2.0",
   "description": "",
   "main": "index.js",
@@ -14,9 +14,9 @@
   "homepage": "https://astrocorp.net/signal",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/astrocorp/signal.git"
+    "url": "git+https://github.com/bloom42/signal.git"
   },
   "bugs": {
-    "url": "https://github.com/astrocorp42/signal/issues"
+    "url": "https://github.com/bloom42/signal/issues"
   }
 }
