@@ -1,6 +1,6 @@
 .PHONY: dev build docker clean install
 
-DOCKER_IMAGE = "astrocorp/signal_www"
+DOCKER_IMAGE = "bloom42/signal_www"
 
 build:
 	npm run build
