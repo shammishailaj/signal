@@ -1,6 +1,6 @@
 site_name: Signal
-site_url: https://astrocorp.net
-repo_url: https://github.com/astrocorp42/signal
+site_url: https://opensource.bloom.sh
+repo_url: https://github.com/bloom42/signal
 
 site_dir: dist
 docs_dir: pages
