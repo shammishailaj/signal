@@ -11,11 +11,11 @@
 ### NPM
 
 ```bash
-npm i -s @astrocorp/signal
+npm i -s @bloom42/signal
 ```
 
 ```javascript
-import signal from '@astrocorp/signal';
+import signal from '@bloom42/signal';
 
 signal.init('[PROJECT_TRACKING_ID]', { endpoint: '[SIGNAL_API_HOST]' });
 ```

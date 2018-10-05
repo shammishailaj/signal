@@ -1,6 +1,6 @@
 # API
 
-[![Docker image](https://img.shields.io/badge/docker-astrocorp/signal__api-blue.svg)](https://hub.docker.com/r/astrocorp/signal_api)
+[![Docker image](https://img.shields.io/badge/docker-bloom42/signal__api-blue.svg)](https://hub.docker.com/r/bloom42/signal_api)
 
 
 ## Usage
@@ -23,14 +23,14 @@ HOST="http://localhost:8080"
 ### With Docker
 ```bash
 # $ docker run -d --name signal_postgres -e POSTGRES_USER="signal" -e POSTGRES_PASSWORD="xxx" postgres
-$ docker run -ti --rm --name signal_api -v $PWD/.env:/signal/.env:ro astrocorp/signal_api /signal/signal -migrate # to migrate the database schema
-$ docker run -d --name signal_api -v $PWD/.env:/signal/.env:ro -p 8080:8080 astrocorp/signal_api
+$ docker run -ti --rm --name signal_api -v $PWD/.env:/signal/.env:ro bloom42/signal_api /signal/signal -migrate # to migrate the database schema
+$ docker run -d --name signal_api -v $PWD/.env:/signal/.env:ro -p 8080:8080 bloom42/signal_api
 ```
 
 ### With Go
 
 ```
-git clone git@github.com:astrocorp42/signal.git
+git clone git@github.com:bloom42/signal.git
 cd api
 make # or go install
 ./dist/signal -migrate # to migrate the database schema

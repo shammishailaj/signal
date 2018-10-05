@@ -1,6 +1,6 @@
 {
   "name": "@bloom42/signal",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
   "devDependencies": {
     "uglify-js": "^3.4.9"
   },
-  "homepage": "https://astrocorp.net/signal",
+  "homepage": "https://opensource.bloom.sh/signal",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bloom42/signal.git"
